@@ -8,11 +8,11 @@ data class PaymentMethods(
     val usernamePasswords: List<UsernamePassword> = emptyList(),
 ) {
 
-    fun isEmpty(): Boolean = creditCards.isEmpty()
-        && giftCards.isEmpty()
-        && ibans.isEmpty()
-        && upis.isEmpty()
-        && usernamePasswords.isEmpty()
+    fun isEmpty(): Boolean = creditCards.isEmpty() &&
+        giftCards.isEmpty() &&
+        ibans.isEmpty() &&
+        upis.isEmpty() &&
+        usernamePasswords.isEmpty()
 }
 
 data class CombinedPaymentMethods(

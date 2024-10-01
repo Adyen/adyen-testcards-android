@@ -157,17 +157,17 @@ internal class AutofillViewModel @Inject constructor(
     private fun detectPaymentMethod(): PaymentMethodType {
         return with(parsedStructure) {
             when {
-                creditCardNumberId != null
-                    || creditCardExpiryDateId != null
-                    || creditCardSecurityCodeId != null -> PaymentMethodType.CREDIT_CARD
+                creditCardNumberId != null ||
+                    creditCardExpiryDateId != null ||
+                    creditCardSecurityCodeId != null -> PaymentMethodType.CREDIT_CARD
 
-                giftCardNumberId != null
-                    || giftCardPinId != null -> PaymentMethodType.GIFT_CARD
+                giftCardNumberId != null ||
+                    giftCardPinId != null -> PaymentMethodType.GIFT_CARD
 
                 upiVpaId != null -> PaymentMethodType.UPI
 
-                usernameId != null
-                    || passwordId != null -> PaymentMethodType.USERNAME_PASSWORD
+                usernameId != null ||
+                    passwordId != null -> PaymentMethodType.USERNAME_PASSWORD
 
                 else -> PaymentMethodType.UNKNOWN
             }

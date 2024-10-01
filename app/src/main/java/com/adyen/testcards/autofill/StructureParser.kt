@@ -60,11 +60,11 @@ internal class StructureParser {
         Log.d(TAG, "Parsing by autofill hint")
         node.autofillHints?.forEach { hint ->
             when {
-                hint.contains(View.AUTOFILL_HINT_USERNAME, true)
-                    || hint.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS, true)
-                    || hint.contains(View.AUTOFILL_HINT_PHONE, true)
-                    || hint.contains(AUTOFILL_HINT_EMAIL, true)
-                    || hint.contains(AUTOFILL_HINT_LOGIN, true) -> {
+                hint.contains(View.AUTOFILL_HINT_USERNAME, true) ||
+                    hint.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS, true) ||
+                    hint.contains(View.AUTOFILL_HINT_PHONE, true) ||
+                    hint.contains(AUTOFILL_HINT_EMAIL, true) ||
+                    hint.contains(AUTOFILL_HINT_LOGIN, true) -> {
                     if (result.passwordId == null) {
                         result.usernameId = node.autofillId
                     } else {

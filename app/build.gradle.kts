@@ -8,6 +8,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
     alias(libs.plugins.protobuf)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -30,7 +31,6 @@ android {
     signingConfigs {
         getByName("debug") {}
     }
-
 
     buildTypes {
         debug {
@@ -119,7 +119,6 @@ protobuf {
                     option("lite")
                 }
             }
-
         }
     }
 }
@@ -132,5 +131,16 @@ androidComponents {
                 setSource(tasks.getByName("generate${capName}Proto").outputs)
             }
         }
+    }
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        ktlint()
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
     }
 }
