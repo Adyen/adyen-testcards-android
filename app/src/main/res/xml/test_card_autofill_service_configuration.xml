@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:supportsInlineSuggestions="false"
+    tools:targetApi="r">
+
+    <!--  Android system  -->
+    <compatibility-package
+        android:name="com.android.browser"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.android.htmlviewer"
+        android:maxLongVersionCode="10000000000"/>
+
+    <!--  Brave  -->
+    <compatibility-package
+        android:name="com.brave.browser"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.brave.browser_beta"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.brave.browser_default"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.brave.browser_dev"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.brave.browser_nightly"
+        android:maxLongVersionCode="10000000000"/>
+
+    <!--  Chrome  -->
+    <compatibility-package
+        android:name="com.android.chrome"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.chrome.beta"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.chrome.canary"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.chrome.dev"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.google.android.apps.chrome"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="com.google.android.apps.chrome_dev"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.chromium.chrome"
+        android:maxLongVersionCode="10000000000"/>
+
+    <!--  Mozilla  -->
+    <compatibility-package
+        android:name="org.mozilla.fenix"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.mozilla.fenix.nightly"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.mozilla.fennec_aurora"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.mozilla.fennec_fdroid"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.mozilla.firefox"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.mozilla.firefox_beta"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.mozilla.reference.browser"
+        android:maxLongVersionCode="10000000000"/>
+    <compatibility-package
+        android:name="org.mozilla.rocket"
+        android:maxLongVersionCode="10000000000"/>
+
+</autofill-service>

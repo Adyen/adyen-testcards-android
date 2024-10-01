@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_package = "com.adyen.testcards.data";
+option java_multiple_files = true;
+
+message StoredFavorites {
+  string type = 1;
+  repeated string creditCards = 2;
+  repeated string giftCards = 3;
+  repeated string ibans = 4;
+  repeated string upis = 5;
+  repeated string usernamePasswords = 6;
+}
