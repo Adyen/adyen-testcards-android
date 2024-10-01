@@ -1,4 +1,3 @@
-import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -13,12 +12,12 @@ plugins {
 
 android {
     namespace = "com.adyen.testcards"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.adyen.testcards"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -126,7 +125,8 @@ protobuf {
 androidComponents {
     onVariants(selector().all()) { variant ->
         afterEvaluate {
-            val capName = variant.name.capitalized()
+            val capName =
+                variant.name.replaceFirstChar { it.titlecase() }
             tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
                 setSource(tasks.getByName("generate${capName}Proto").outputs)
             }
