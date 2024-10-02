@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: true
+
+      - name: Gradle build
+        run: ./gradlew build
+
+      - name: Set PROJECT_VERSION
+        run: |
+          chmod +x scripts/version_name.sh
+          PROJECT_VERSION=$(./scripts/version_name.sh)
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+          echo "Variable PROJECT_VERSION set to: ${PROJECT_VERSION}"
+
+      - name: Create Github release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.PROJECT_VERSION }}
+          bodyFile: README.md
+          draft: true
+          artifacts: "app/build/outputs/apk/release/app-release.apk"

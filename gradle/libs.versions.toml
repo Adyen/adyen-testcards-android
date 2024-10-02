@@ -18,6 +18,7 @@ protobuf = "4.28.1"
 protobufPlugin = "0.9.4"
 retrofit = "2.11.0"
 spotless = "7.0.0.BETA2"
+versionName = "1.0.0-alpha01"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
