@@ -37,6 +37,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.PROJECT_VERSION }}
-          bodyFile: README.md
+          bodyFile: RELEASE_NOTES.md
           draft: true
           artifacts: "app/build/outputs/apk/release/app-release.apk"
