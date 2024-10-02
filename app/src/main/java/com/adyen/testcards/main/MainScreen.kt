@@ -6,6 +6,7 @@ import android.provider.Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE
 import android.view.autofill.AutofillManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -199,53 +200,93 @@ private fun MainContent(
         if (paymentMethods.usernamePasswords.isNotEmpty()) {
             usernamePasswordSection(paymentMethods.usernamePasswords, onFavoriteClick)
         }
+
+        item {
+            val context = LocalContext.current
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName?.let { version ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("Version: $version", style = MaterialTheme.typography.labelMedium)
+                }
+            }
+        }
     }
 }
 
 @Composable
 private fun MainEmpty() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Image(
-            imageVector = ImageVector.vectorResource(R.drawable.card_phone_payment),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth(.8f),
-        )
-        Spacer(Modifier.padding(32.dp))
-        Text("No content!", style = MaterialTheme.typography.titleLarge)
-        Text(
-            text = "Improve your search query or try pulling to refresh the content.",
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp, 8.dp),
-        )
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.card_phone_payment),
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth(.8f),
+            )
+            Spacer(Modifier.padding(32.dp))
+            Text("No content!", style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = "Improve your search query or try pulling to refresh the content.",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(16.dp, 8.dp),
+            )
+        }
+
+        val context = LocalContext.current
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName?.let { version ->
+            Text(
+                "Version: $version",
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomCenter),
+            )
+        }
     }
 }
 
 @Composable
 private fun MainError() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Image(
-            imageVector = ImageVector.vectorResource(R.drawable.man_shrugging),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth(.8f),
-        )
-        Spacer(Modifier.padding(32.dp))
-        Text("Error!", style = MaterialTheme.typography.titleLarge)
-        Text(
-            text = "Try pulling to refresh the content.",
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp, 8.dp),
-        )
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.man_shrugging),
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth(.8f),
+            )
+            Spacer(Modifier.padding(32.dp))
+            Text("Error!", style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = "Try pulling to refresh the content.",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(16.dp, 8.dp),
+            )
+        }
+
+        val context = LocalContext.current
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName?.let { version ->
+            Text(
+                "Version: $version",
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomCenter),
+            )
+        }
     }
 }
