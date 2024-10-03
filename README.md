@@ -17,7 +17,7 @@ Alternatively, you could clone this repository and run the app directly on your 
 ## Usage
 Open the app for the first time and it will prompt you to configure the Adyen Test Cards autofill service. Once done, you can prefill payment method fields as in the video below:
 
-![Demo video][demo.video]
+<video src='https://github.com/user-attachments/assets/df20d562-af1d-4703-88a8-43b87a86039b' />
 
 ## Support
 If you have a feature request, or spotted a bug or a technical problem, create a GitHub issue.
