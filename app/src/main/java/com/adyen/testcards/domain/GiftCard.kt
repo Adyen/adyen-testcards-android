@@ -5,7 +5,8 @@ data class GiftCard(
     val securityCode: String,
     val type: String,
     val logo: String,
-    val isFavorite: Boolean,
+    val isFavorite: Boolean = false,
+    val showIcon: Boolean = false,
 ) {
 
     fun toSearchString(): String = "$number $securityCode $type"

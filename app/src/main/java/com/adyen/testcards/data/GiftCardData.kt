@@ -17,6 +17,5 @@ data class GiftCardData(
         securityCode = securityCode,
         type = type,
         logo = logo,
-        isFavorite = false,
     )
 }

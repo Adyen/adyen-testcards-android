@@ -14,6 +14,5 @@ data class UsernamePasswordData(
         username = username,
         password = password,
         type = type,
-        isFavorite = false,
     )
 }

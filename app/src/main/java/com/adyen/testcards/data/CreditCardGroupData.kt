@@ -34,6 +34,5 @@ data class CreditCardData(
         securityCode = securityCode,
         issuingCountry = issuingCountry,
         is3DS = is3DS,
-        isFavorite = false,
     )
 }
