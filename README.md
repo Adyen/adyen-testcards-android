@@ -1,7 +1,7 @@
 ![Adyen Test Cards Android header][header.image]
 
 # Adyen Test Cards Android
-An Android app allowing to easily prefill Adyen test card number and other payment methods.
+An Android app allowing to easily autofill Adyen test card number and other payment methods.
 
 ## Requirements
 To run this app the minimum required Android version is 8.0 (API 26).
@@ -12,7 +12,7 @@ Download the [APK file from the latest release](https://github.com/Adyen/adyen-t
 Alternatively, you could clone this repository and run the app directly on your device.
 
 ## Usage
-Open the app for the first time and it will prompt you to configure the Adyen Test Cards autofill service. Once done, you can prefill payment method fields as in the video below:
+Open the app for the first time and it will prompt you to configure the Adyen Test Cards autofill service. Once done, you can autofill payment method fields as in the video below:
 
 https://github.com/user-attachments/assets/df20d562-af1d-4703-88a8-43b87a86039b
 
