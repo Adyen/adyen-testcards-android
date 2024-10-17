@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adyen.testcards.R
 import com.adyen.testcards.domain.UsernamePassword
@@ -59,6 +60,7 @@ internal fun UsernamePassword(
             isFavorite = it
             onFavoriteClick(data, it)
         },
+        icon = R.drawable.ic_pm_wallet.takeIf { data.showIcon },
         modifier = modifier
             .clickable(enabled = onClick != null) { onClick?.invoke(data) }
             .fillMaxWidth()
@@ -74,4 +76,17 @@ internal fun UsernamePassword(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsernamePasswordPreview() {
+    val usernamePassword = UsernamePassword(
+        username = "testing@adyen.com",
+        password = "123456",
+        type = "Test payment method",
+        isFavorite = true,
+        showIcon = true,
+    )
+    UsernamePassword(usernamePassword, { _, _ -> })
 }

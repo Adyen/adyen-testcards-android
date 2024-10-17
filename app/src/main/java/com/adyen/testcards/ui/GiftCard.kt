@@ -60,6 +60,7 @@ internal fun GiftCard(
             isFavorite = it
             onFavoriteClick(giftCard, it)
         },
+        icon = R.drawable.ic_pm_gift_card.takeIf { giftCard.showIcon },
         modifier = modifier
             .clickable(enabled = onClick != null) { onClick?.invoke(giftCard) }
             .fillMaxWidth()
@@ -80,6 +81,13 @@ internal fun GiftCard(
 @Preview(showBackground = true)
 @Composable
 private fun GiftCardPreview() {
-    val card = GiftCard("1234 1234 1234 1234", "123", "test", "logo", true)
+    val card = GiftCard(
+        number = "1234 1234 1234 1234",
+        securityCode = "123",
+        type = "test",
+        logo = "logo",
+        isFavorite = true,
+        showIcon = true,
+    )
     GiftCard(card, { _, _ -> })
 }

@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adyen.testcards.R
 import com.adyen.testcards.domain.UPI
@@ -55,6 +56,7 @@ internal fun UPI(
             isFavorite = it
             onFavoriteClick(upi, it)
         },
+        icon = R.drawable.ic_pm_upi.takeIf { upi.showIcon },
         modifier = modifier
             .clickable(enabled = onClick != null) { onClick?.invoke(upi) }
             .fillMaxWidth()
@@ -62,4 +64,15 @@ internal fun UPI(
     ) {
         Text(text = upi.virtualPaymentAddress)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UPIPreview() {
+    val upi = UPI(
+        virtualPaymentAddress = "testvpa@icici",
+        isFavorite = true,
+        showIcon = true,
+    )
+    UPI(upi, { _, _ -> })
 }
