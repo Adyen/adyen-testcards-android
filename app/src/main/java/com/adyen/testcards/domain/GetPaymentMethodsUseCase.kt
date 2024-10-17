@@ -60,8 +60,8 @@ internal class GetPaymentMethodsUseCase @Inject constructor(
         val creditCards = paymentMethods.creditCards.map { group ->
             val items = group.items.map {
                 val isFavorite = favorites.creditCards.contains(it.number)
-                it.copy(isFavorite = isFavorite).also { copy ->
-                    if (isFavorite) favoriteCreditCards.add(copy)
+                it.copy(isFavorite = isFavorite).also { mapped ->
+                    if (isFavorite) favoriteCreditCards.add(mapped.copy(icon = group.icon))
                 }
             }
             group.copy(items = items)
@@ -70,32 +70,32 @@ internal class GetPaymentMethodsUseCase @Inject constructor(
         val favoriteGiftCards = mutableListOf<GiftCard>()
         val giftCards = paymentMethods.giftCards.map {
             val isFavorite = favorites.giftCards.contains(it.number)
-            it.copy(isFavorite = isFavorite).also { copy ->
-                if (isFavorite) favoriteGiftCards.add(copy)
+            it.copy(isFavorite = isFavorite).also { mapped ->
+                if (isFavorite) favoriteGiftCards.add(mapped.copy(showIcon = true))
             }
         }
 
         val favoriteIBANs = mutableListOf<IBAN>()
         val ibans = paymentMethods.ibans.map {
             val isFavorite = favorites.ibans.contains(it.iban)
-            it.copy(isFavorite = isFavorite).also { copy ->
-                if (isFavorite) favoriteIBANs.add(copy)
+            it.copy(isFavorite = isFavorite).also { mapped ->
+                if (isFavorite) favoriteIBANs.add(mapped.copy(showIcon = true))
             }
         }
 
         val favoriteUPIs = mutableListOf<UPI>()
         val upis = paymentMethods.upis.map {
             val isFavorite = favorites.upis.contains(it.virtualPaymentAddress)
-            it.copy(isFavorite = isFavorite).also { copy ->
-                if (isFavorite) favoriteUPIs.add(copy)
+            it.copy(isFavorite = isFavorite).also { mapped ->
+                if (isFavorite) favoriteUPIs.add(mapped.copy(showIcon = true))
             }
         }
 
         val favoriteUsernamePasswords = mutableListOf<UsernamePassword>()
         val usernamePasswords = paymentMethods.usernamePasswords.map {
             val isFavorite = favorites.usernamePasswords.contains(it.username)
-            it.copy(isFavorite = isFavorite).also { copy ->
-                if (isFavorite) favoriteUsernamePasswords.add(copy)
+            it.copy(isFavorite = isFavorite).also { mapped ->
+                if (isFavorite) favoriteUsernamePasswords.add(mapped.copy(showIcon = true))
             }
         }
 

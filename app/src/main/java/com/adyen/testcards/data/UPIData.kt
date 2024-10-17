@@ -10,6 +10,5 @@ data class UPIData(
 
     fun toDomain() = UPI(
         virtualPaymentAddress = virtualPaymentAddress,
-        isFavorite = false,
     )
 }

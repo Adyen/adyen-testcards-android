@@ -79,6 +79,7 @@ internal fun CreditCard(
             isFavorite = it
             onFavoriteClick(card, it)
         },
+        icon = card.icon,
         modifier = modifier
             .clickable(enabled = onClick != null) { onClick?.invoke(card) }
             .fillMaxWidth()
@@ -106,6 +107,14 @@ internal fun CreditCard(
 @Preview(showBackground = true)
 @Composable
 private fun CreditCardPreview() {
-    val card = CreditCard("1234 1234 1234 1234", "03/30", "123", "NL", true, true)
+    val card = CreditCard(
+        number = "1234 1234 1234 1234",
+        expiryDate = "03/30",
+        securityCode = "123",
+        issuingCountry = "NL",
+        is3DS = true,
+        isFavorite = true,
+        icon = R.drawable.ic_pm_visa,
+    )
     CreditCard(card = card, onFavoriteClick = { _, _ -> })
 }

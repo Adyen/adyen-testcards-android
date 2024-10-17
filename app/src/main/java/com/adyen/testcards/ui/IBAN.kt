@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adyen.testcards.R
 import com.adyen.testcards.domain.IBAN
@@ -59,6 +60,7 @@ internal fun IBAN(
             isFavorite = it
             onFavoriteClick(iban, it)
         },
+        icon = R.drawable.ic_pm_bank.takeIf { iban.showIcon },
         modifier = modifier
             .clickable(enabled = onClick != null) { onClick?.invoke(iban) }
             .fillMaxWidth()
@@ -74,4 +76,17 @@ internal fun IBAN(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun IBANPreview() {
+    val iban = IBAN(
+        iban = "DE53 5002 1100 8468 849822",
+        holderName = "J. Smith",
+        issuingCountry = "Germany",
+        isFavorite = true,
+        showIcon = true,
+    )
+    IBAN(iban, { _, _ -> })
 }

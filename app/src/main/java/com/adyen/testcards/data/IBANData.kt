@@ -15,6 +15,5 @@ data class IBANData(
         iban = iban,
         holderName = holderName,
         issuingCountry = issuingCountry,
-        isFavorite = false,
     )
 }

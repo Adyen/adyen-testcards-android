@@ -14,7 +14,8 @@ data class CreditCard(
     val securityCode: String,
     val issuingCountry: String,
     val is3DS: Boolean,
-    val isFavorite: Boolean,
+    val isFavorite: Boolean = false,
+    @DrawableRes val icon: Int? = null,
 ) {
 
     fun toSearchString(): String = "$number $expiryDate $securityCode $issuingCountry"
