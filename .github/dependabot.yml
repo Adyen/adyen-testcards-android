@@ -1,0 +1,19 @@
+version: 2
+
+updates:
+  - package-ecosystem: "gradle"
+    versioning-strategy: "increase"
+    directory: "/"
+    schedule:
+      interval: monthly
+    labels:
+      - "Dependencies"
+    groups:
+      kotlin:
+        patterns:
+          - "androidx.compose.compiler:compiler"
+          - "com.google.devtools.ksp"
+          - "org.jetbrains.kotlin.*"
+      kotlin-coroutines:
+        patterns:
+          - "org.jetbrains.kotlinx:kotlinx-coroutines.*"
