@@ -7,6 +7,10 @@ on:
     # Runs every monday at 12AM
     - cron: '0 0 * * 1'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   codeql:
     name: Run CodeQL
