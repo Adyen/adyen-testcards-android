@@ -1,0 +1,27 @@
+name: CodeQL
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+  schedule:
+    # Runs every monday at 12AM
+    - cron: '0 0 * * 1'
+
+jobs:
+  codeql:
+    name: Run CodeQL
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
