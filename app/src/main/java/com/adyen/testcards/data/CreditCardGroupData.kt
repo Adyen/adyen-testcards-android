@@ -31,8 +31,14 @@ data class CreditCardData(
     fun toDomain() = CreditCard(
         number = number,
         expiryDate = expiryDate,
-        securityCode = securityCode,
-        issuingCountry = issuingCountry,
+        securityCode = securityCode.takeIfNotNA(),
+        issuingCountry = issuingCountry.takeIfNotNA(),
         is3DS = is3DS,
     )
 }
+
+private fun String.takeIfNotNA(): String? {
+    return takeIf { it != NA_STRING }
+}
+
+private const val NA_STRING = "n/a"

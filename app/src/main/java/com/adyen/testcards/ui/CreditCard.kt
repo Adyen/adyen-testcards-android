@@ -1,10 +1,12 @@
 package com.adyen.testcards.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
@@ -19,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -87,16 +90,21 @@ internal fun CreditCard(
     ) {
         Column {
             Text(text = card.number)
-            Spacer(modifier = Modifier.padding(4.dp))
-            Row {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(text = card.expiryDate, style = MaterialTheme.typography.labelSmall)
-                Spacer(modifier = Modifier.padding(8.dp))
-                Text(text = card.securityCode, style = MaterialTheme.typography.labelSmall)
-                Spacer(modifier = Modifier.padding(8.dp))
-                Text(text = card.issuingCountry, style = MaterialTheme.typography.labelSmall)
+                Text(
+                    text = card.securityCode ?: stringResource(R.string.cvc_not_applicable),
+                    style = MaterialTheme.typography.labelSmall,
+                )
+                if (card.issuingCountry != null) {
+                    Text(
+                        text = card.issuingCountry,
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
 
                 if (card.is3DS) {
-                    Spacer(modifier = Modifier.padding(8.dp))
                     Text(text = "3DS", style = MaterialTheme.typography.labelSmall)
                 }
             }
@@ -104,7 +112,7 @@ internal fun CreditCard(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "All params are set")
 @Composable
 private fun CreditCardPreview() {
     val card = CreditCard(
@@ -115,6 +123,21 @@ private fun CreditCardPreview() {
         is3DS = true,
         isFavorite = true,
         icon = R.drawable.ic_pm_visa,
+    )
+    CreditCard(card = card, onFavoriteClick = { _, _ -> })
+}
+
+@Preview(showBackground = true, name = "All optional params are null")
+@Composable
+private fun CreditCardMinimalPreview() {
+    val card = CreditCard(
+        number = "1234 1234 1234 1234",
+        expiryDate = "03/30",
+        securityCode = null,
+        issuingCountry = null,
+        is3DS = false,
+        isFavorite = false,
+        icon = null,
     )
     CreditCard(card = card, onFavoriteClick = { _, _ -> })
 }

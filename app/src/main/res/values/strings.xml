@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Adyen Test Cards</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="cvc_not_applicable">No CVC</string>
 </resources>
