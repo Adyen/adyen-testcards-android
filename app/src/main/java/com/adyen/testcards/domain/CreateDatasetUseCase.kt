@@ -1,12 +1,13 @@
 package com.adyen.testcards.domain
 
+import android.os.Build
 import android.service.autofill.Dataset
+import android.service.autofill.Field
+import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
-import android.widget.RemoteViews
 import com.adyen.testcards.autofill.ParsedStructure
 import javax.inject.Inject
 
-@Suppress("DEPRECATION")
 internal class CreateDatasetUseCase @Inject constructor() {
 
     fun createDataset(input: Any, parsedStructure: ParsedStructure): Dataset = when (input) {
@@ -22,23 +23,14 @@ internal class CreateDatasetUseCase @Inject constructor() {
         val datasetBuilder = Dataset.Builder()
 
         with(parsedStructure) {
-            val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             creditCardNumberId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(card.number.replaceSpaces()), emptyPresentation)
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(card.number.replaceSpaces()))
             }
             creditCardExpiryDateId?.let {
-                datasetBuilder.setValue(
-                    it,
-                    AutofillValue.forText(card.expiryDate),
-                    emptyPresentation,
-                )
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(card.expiryDate))
             }
             creditCardSecurityCodeId?.let {
-                datasetBuilder.setValue(
-                    it,
-                    AutofillValue.forText(card.securityCode),
-                    emptyPresentation,
-                )
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(card.securityCode))
             }
         }
 
@@ -49,12 +41,11 @@ internal class CreateDatasetUseCase @Inject constructor() {
         val datasetBuilder = Dataset.Builder()
 
         with(parsedStructure) {
-            val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             giftCardNumberId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(card.number.replaceSpaces()), emptyPresentation)
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(card.number.replaceSpaces()))
             }
             giftCardPinId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(card.securityCode), emptyPresentation)
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(card.securityCode))
             }
         }
 
@@ -65,9 +56,8 @@ internal class CreateDatasetUseCase @Inject constructor() {
         val datasetBuilder = Dataset.Builder()
 
         with(parsedStructure) {
-            val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             ibanId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(iban.iban.replaceSpaces()), emptyPresentation)
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(iban.iban.replaceSpaces()))
             }
         }
 
@@ -78,9 +68,8 @@ internal class CreateDatasetUseCase @Inject constructor() {
         val datasetBuilder = Dataset.Builder()
 
         with(parsedStructure) {
-            val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             upiVpaId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(upi.virtualPaymentAddress), emptyPresentation)
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(upi.virtualPaymentAddress))
             }
         }
 
@@ -91,16 +80,35 @@ internal class CreateDatasetUseCase @Inject constructor() {
         val datasetBuilder = Dataset.Builder()
 
         with(parsedStructure) {
-            val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             usernameId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(data.username), emptyPresentation)
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(data.username))
             }
             passwordId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(data.password), emptyPresentation)
+                datasetBuilder.setValueCompat(it, AutofillValue.forText(data.password))
             }
         }
 
         return datasetBuilder.build()
+    }
+
+    private fun Dataset.Builder.setValueCompat(
+        id: AutofillId,
+        autofillValue: AutofillValue?
+    ): Dataset.Builder {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            setField(
+                id,
+                autofillValue?.let {
+                    Field.Builder()
+                        .setValue(it)
+                        .build()
+                },
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            setValue(id, autofillValue)
+        }
+        return this
     }
 
     private fun String.replaceSpaces(): String {

@@ -19,9 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-internal class AutofillActivity :
-
-    ComponentActivity() {
+internal class AutofillActivity : ComponentActivity() {
 
     private val viewModel: AutofillViewModel by viewModels()
 
