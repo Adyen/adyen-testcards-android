@@ -24,7 +24,7 @@ internal class CreateDatasetUseCase @Inject constructor() {
         with(parsedStructure) {
             val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             creditCardNumberId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(card.number), emptyPresentation)
+                datasetBuilder.setValue(it, AutofillValue.forText(card.number.replaceSpaces()), emptyPresentation)
             }
             creditCardExpiryDateId?.let {
                 datasetBuilder.setValue(
@@ -51,7 +51,7 @@ internal class CreateDatasetUseCase @Inject constructor() {
         with(parsedStructure) {
             val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             giftCardNumberId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(card.number), emptyPresentation)
+                datasetBuilder.setValue(it, AutofillValue.forText(card.number.replaceSpaces()), emptyPresentation)
             }
             giftCardPinId?.let {
                 datasetBuilder.setValue(it, AutofillValue.forText(card.securityCode), emptyPresentation)
@@ -67,7 +67,7 @@ internal class CreateDatasetUseCase @Inject constructor() {
         with(parsedStructure) {
             val emptyPresentation = RemoteViews(applicationId, android.R.layout.simple_list_item_1)
             ibanId?.let {
-                datasetBuilder.setValue(it, AutofillValue.forText(iban.iban), emptyPresentation)
+                datasetBuilder.setValue(it, AutofillValue.forText(iban.iban.replaceSpaces()), emptyPresentation)
             }
         }
 
@@ -101,5 +101,9 @@ internal class CreateDatasetUseCase @Inject constructor() {
         }
 
         return datasetBuilder.build()
+    }
+
+    private fun String.replaceSpaces(): String {
+        return this.replace(" ", "")
     }
 }
