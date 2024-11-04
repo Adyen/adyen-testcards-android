@@ -76,15 +76,18 @@ internal class StructureParser {
                     result.passwordId = node.autofillId
                 }
 
-                hint.contains(View.AUTOFILL_HINT_CREDIT_CARD_NUMBER, true) -> {
+                hint.contains(View.AUTOFILL_HINT_CREDIT_CARD_NUMBER, true) ||
+                    hint.contains(AUTOFILL_HINT_WEB_CC_NUMBER, true) -> {
                     result.creditCardNumberId = node.autofillId
                 }
 
-                hint.contains(View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE, true) -> {
+                hint.contains(View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE, true) ||
+                    hint.contains(AUTOFILL_HINT_WEB_CC_EXP, true) -> {
                     result.creditCardExpiryDateId = node.autofillId
                 }
 
-                hint.contains(View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE, true) -> {
+                hint.contains(View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE, true) ||
+                    hint.contains(AUTOFILL_HINT_WEB_CC_CSC, true) -> {
                     result.creditCardSecurityCodeId = node.autofillId
                 }
 
@@ -197,6 +200,10 @@ internal class StructureParser {
 
         private const val AUTOFILL_HINT_EMAIL = "email"
         private const val AUTOFILL_HINT_LOGIN = "login"
+
+        private const val AUTOFILL_HINT_WEB_CC_NUMBER = "cc-number"
+        private const val AUTOFILL_HINT_WEB_CC_EXP = "cc-exp"
+        private const val AUTOFILL_HINT_WEB_CC_CSC = "cc-csc"
 
         private const val ATTR_EMAIL = "email"
         private const val ATTR_PASSWORD = "password"
