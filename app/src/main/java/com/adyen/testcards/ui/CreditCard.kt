@@ -1,6 +1,7 @@
 package com.adyen.testcards.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,6 +69,7 @@ internal fun LazyListScope.creditCardSection(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CreditCard(
     card: CreditCard,
@@ -76,6 +78,7 @@ internal fun CreditCard(
     onClick: ((CreditCard) -> Unit)? = null,
 ) {
     var isFavorite by remember(card) { mutableStateOf(card.isFavorite) }
+    var showCopyMenu by remember(card) { mutableStateOf(false) }
     FavoritableRow(
         isFavorite = isFavorite,
         onFavoriteClicked = {
@@ -84,7 +87,10 @@ internal fun CreditCard(
         },
         icon = card.icon,
         modifier = modifier
-            .clickable(enabled = onClick != null) { onClick?.invoke(card) }
+            .combinedClickable(
+                onClick = { onClick?.invoke(card) },
+                onLongClick = { showCopyMenu = true },
+            )
             .fillMaxWidth()
             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
     ) {
@@ -109,6 +115,16 @@ internal fun CreditCard(
                 }
             }
         }
+
+        CopyMenu(
+            expanded = showCopyMenu,
+            onDismissRequest = { showCopyMenu = false },
+            items = buildMap {
+                set("Number", card.number)
+                set("Expiry date", card.expiryDate)
+                card.securityCode?.let { set("Security code", it) }
+            },
+        )
     }
 }
 

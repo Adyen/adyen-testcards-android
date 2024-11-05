@@ -1,6 +1,7 @@
 package com.adyen.testcards.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,7 @@ internal fun LazyListScope.usernamePasswordSection(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun UsernamePassword(
     data: UsernamePassword,
@@ -56,6 +58,7 @@ internal fun UsernamePassword(
     onClick: ((UsernamePassword) -> Unit)? = null,
 ) {
     var isFavorite by remember(data) { mutableStateOf(data.isFavorite) }
+    var showCopyMenu by remember(data) { mutableStateOf(false) }
     FavoritableRow(
         isFavorite = isFavorite,
         onFavoriteClicked = {
@@ -64,7 +67,10 @@ internal fun UsernamePassword(
         },
         icon = R.drawable.ic_pm_wallet.takeIf { data.showIcon },
         modifier = modifier
-            .clickable(enabled = onClick != null) { onClick?.invoke(data) }
+            .combinedClickable(
+                onClick = { onClick?.invoke(data) },
+                onLongClick = { showCopyMenu = true },
+            )
             .fillMaxWidth()
             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
     ) {
@@ -76,6 +82,15 @@ internal fun UsernamePassword(
                 Text(text = data.password, style = MaterialTheme.typography.labelSmall)
             }
         }
+
+        CopyMenu(
+            expanded = showCopyMenu,
+            onDismissRequest = { showCopyMenu = false },
+            items = buildMap {
+                set("Username", data.username)
+                set("Password", data.password)
+            },
+        )
     }
 }
 
