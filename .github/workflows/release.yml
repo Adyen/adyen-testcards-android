@@ -33,6 +33,7 @@ jobs:
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
           echo "Variable PROJECT_VERSION set to: ${PROJECT_VERSION}"
 
+      # Added a comment for test
       - name: Create Github release
         uses: ncipollo/release-action@v1
         with:
