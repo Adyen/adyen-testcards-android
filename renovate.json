@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "labels": ["Dependencies"],
+  "packageRules" : [
+    {
+      "matchPackagePatterns": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines.*"
+      ],
+      "groupName": "Kotlin Coroutines"
+    },
+    {
+      "matchPackagePatterns": [
+        "androidx.compose.compiler:compiler",
+        "com.google.devtools.ksp",
+        "org.jetbrains.kotlin.*"
+      ],
+      "groupName": "Kotlin"
+    },
+    {
+      "matchPackagePatterns" : ["*"],
+      "minimumReleaseAge" : "21 days",
+      "schedule" : ["on the first day of the month"]
+    }
+  ],
+  "rebaseWhen" : "never"
+}
