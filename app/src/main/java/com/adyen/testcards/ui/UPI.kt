@@ -1,6 +1,7 @@
 package com.adyen.testcards.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
@@ -42,6 +43,7 @@ internal fun LazyListScope.upiSection(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun UPI(
     upi: UPI,
@@ -50,6 +52,7 @@ internal fun UPI(
     onClick: ((UPI) -> Unit)? = null,
 ) {
     var isFavorite by remember(upi) { mutableStateOf(upi.isFavorite) }
+    var showCopyMenu by remember(upi) { mutableStateOf(false) }
     FavoritableRow(
         isFavorite = isFavorite,
         onFavoriteClicked = {
@@ -58,11 +61,22 @@ internal fun UPI(
         },
         icon = R.drawable.ic_pm_upi.takeIf { upi.showIcon },
         modifier = modifier
-            .clickable(enabled = onClick != null) { onClick?.invoke(upi) }
+            .combinedClickable(
+                onClick = { onClick?.invoke(upi) },
+                onLongClick = { showCopyMenu = true },
+            )
             .fillMaxWidth()
             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
     ) {
         Text(text = upi.virtualPaymentAddress)
+
+        CopyMenu(
+            expanded = showCopyMenu,
+            onDismissRequest = { showCopyMenu = false },
+            items = buildMap {
+                set("Virtual Payment Address", upi.virtualPaymentAddress)
+            },
+        )
     }
 }
 

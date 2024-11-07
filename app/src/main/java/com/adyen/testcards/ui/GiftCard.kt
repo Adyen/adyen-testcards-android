@@ -1,6 +1,7 @@
 package com.adyen.testcards.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,7 @@ internal fun LazyListScope.giftCardSection(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun GiftCard(
     giftCard: GiftCard,
@@ -56,6 +58,7 @@ internal fun GiftCard(
     onClick: ((GiftCard) -> Unit)? = null,
 ) {
     var isFavorite by remember(giftCard) { mutableStateOf(giftCard.isFavorite) }
+    var showCopyMenu by remember(giftCard) { mutableStateOf(false) }
     FavoritableRow(
         isFavorite = isFavorite,
         onFavoriteClicked = {
@@ -64,7 +67,10 @@ internal fun GiftCard(
         },
         icon = R.drawable.ic_pm_gift_card.takeIf { giftCard.showIcon },
         modifier = modifier
-            .clickable(enabled = onClick != null) { onClick?.invoke(giftCard) }
+            .combinedClickable(
+                onClick = { onClick?.invoke(giftCard) },
+                onLongClick = { showCopyMenu = true },
+            )
             .fillMaxWidth()
             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
     ) {
@@ -76,6 +82,15 @@ internal fun GiftCard(
                 Text(text = giftCard.securityCode, style = MaterialTheme.typography.labelSmall)
             }
         }
+
+        CopyMenu(
+            expanded = showCopyMenu,
+            onDismissRequest = { showCopyMenu = false },
+            items = buildMap {
+                set("Number", giftCard.number)
+                set("Security code", giftCard.securityCode)
+            },
+        )
     }
 }
 

@@ -1,6 +1,7 @@
 package com.adyen.testcards.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,7 @@ internal fun LazyListScope.ibanSection(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun IBAN(
     iban: IBAN,
@@ -56,6 +58,7 @@ internal fun IBAN(
     onClick: ((IBAN) -> Unit)? = null,
 ) {
     var isFavorite by remember(iban) { mutableStateOf(iban.isFavorite) }
+    var showCopyMenu by remember(iban) { mutableStateOf(false) }
     FavoritableRow(
         isFavorite = isFavorite,
         onFavoriteClicked = {
@@ -64,7 +67,10 @@ internal fun IBAN(
         },
         icon = R.drawable.ic_pm_bank.takeIf { iban.showIcon },
         modifier = modifier
-            .clickable(enabled = onClick != null) { onClick?.invoke(iban) }
+            .combinedClickable(
+                onClick = { onClick?.invoke(iban) },
+                onLongClick = { showCopyMenu = true },
+            )
             .fillMaxWidth()
             .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
     ) {
@@ -76,6 +82,14 @@ internal fun IBAN(
                 Text(text = iban.issuingCountry, style = MaterialTheme.typography.labelSmall)
             }
         }
+
+        CopyMenu(
+            expanded = showCopyMenu,
+            onDismissRequest = { showCopyMenu = false },
+            items = buildMap {
+                set("IBAN", iban.iban)
+            },
+        )
     }
 }
 
