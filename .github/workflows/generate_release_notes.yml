@@ -1,0 +1,115 @@
+name: Generate release notes
+
+# Start this workflow when a release branch is created
+on:
+  workflow_call:
+
+jobs:
+  get_allowed_labels:
+    runs-on: ubuntu-latest
+
+    outputs:
+      allowed_labels: ${{ steps.get_allowed_labels.outputs.ALLOWED_LABELS }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get the list of allowed pull request labels
+        id: get_allowed_labels
+        run: |
+          RED='\033[0;31m'
+          FILE_NAME=.release_notes_allowed_labels_list
+          GITHUB_DIR=.github
+          FILE_PATH=$PROJECT_ROOT/$GITHUB_DIR/$FILE_NAME
+          if [[ ! -f "$FILE_PATH" ]]; then
+             echo -e "${RED}$FILE_NAME file doesn't exits in $GITHUB_DIR/"
+             exit 1
+          fi 
+          ALLOWED_LABELS=$(cat $FILE_PATH)
+          echo "allowed_labels=$ALLOWED_LABELS" >> $GITHUB_OUTPUT
+          echo "Allowed labels are: $ALLOWED_LABELS"
+        env:
+          PROJECT_ROOT: ${{ github.workspace }}
+
+  generate_release_notes:
+    runs-on: ubuntu-latest
+    needs: get_allowed_labels
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate release notes
+        env:
+          ALLOWED_LABELS: ${{ needs.get_allowed_labels.outputs.allowed_labels }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          # Define allowed labels
+          IFS=',' read -r -a ALLOWED_LABELS_ARRAY <<< "$ALLOWED_LABELS"
+          
+          # Initialize variables to hold content for each label
+          declare -A LABEL_CONTENTS
+          for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
+            LABEL_CONTENTS["$LABEL"]=""
+          done
+               
+          # Fetch recent commits since the last release tag
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          COMMITS=$(git log --oneline "$LATEST_TAG"..HEAD)
+          
+          # Iterate over each commit to find PR numbers
+          while IFS= read -r COMMIT; do
+            # Check for "Merge pull request #xxxx" format in commit messages
+            if [[ $COMMIT =~ Merge\ pull\ request\ \#([0-9]+) ]]; then
+              PR_NUMBER="${BASH_REMATCH[1]}"
+              echo "Processing PR #$PR_NUMBER"
+
+              # Fetch PR details using the GitHub API
+              API_URL="https://api.github.com/repos/$GITHUB_REPO/pulls/$PR_NUMBER"
+              PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
+          
+              echo "Fetching PR details from: $API_URL"
+
+              # Extract the PR body
+              PR_BODY=$(echo "$PR_RESPONSE" | jq -r '.body')
+          
+              echo "PR body: $PR_BODY"
+
+              for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
+                HEADER="### $LABEL"
+                echo "Label: $LABEL"
+
+                # Capture content under "### LABEL" until a blank line or another "###" header
+                LABEL_CONTENT=$(echo "$PR_BODY" | awk -v header="$HEADER" '
+                    BEGIN { capture = 0; content = ""; }
+                    $0 == header { capture = 1; next; }
+                    /^### / { if (capture) { exit; } }  # Stop if ### found
+                    capture && /^$/ { if (content) exit; } 
+                    capture { content = content $0 "\n"; }
+                    END { print content; }
+                ')
+                echo "Label content: $LABEL_CONTENT"
+
+                # If content is found, append it to the relevant label content
+                if [ ! -z "$LABEL_CONTENT" ]; then
+                    LABEL_CONTENTS["$LABEL"]="${LABEL_CONTENTS[$LABEL]}\n$LABEL_CONTENT"
+                fi
+              done
+            fi
+          done <<< "$COMMITS"
+
+          # Print and save the output grouped by label
+          OUTPUT=""
+          for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
+              if [ ! -z "${LABEL_CONTENTS[$LABEL]}" ]; then
+                  OUTPUT="${OUTPUT}\n### $LABEL\n${LABEL_CONTENTS[$LABEL]}\n"
+              fi
+          done
+               
+          # Print and save the output if it's not empty
+          if [ ! -z "$OUTPUT" ]; then
+             IFS="" echo "$OUTPUT" 
+             IFS="" echo "$OUTPUT" >> $GITHUB_STEP_SUMMARY
+          fi
