@@ -14,7 +14,19 @@ Alternatively, you could clone this repository and run the app directly on your 
 ## Usage
 Open the app for the first time and it will prompt you to configure the Adyen Test Cards autofill service. Once done, you can autofill payment method fields as in the video below:
 
-https://github.com/user-attachments/assets/df20d562-af1d-4703-88a8-43b87a86039b
+| Android                     | Web                 |
+|-----------------------------|---------------------|
+| ![Android][mystore.android] | ![Web][mystore.web] |
+
+> [!NOTE]  
+> Autofilling on Chrome does not work by default. To enable autofilling on Chrome follow these steps:
+> 1. Open the settings in Chrome and navigate to "Autofill Services"
+> 2. Select "Autofill using another service"
+> 3. Restart Chrome
+>
+> On Chrome versions before 131 a flag needs to be enabled before the steps above can be followed: 
+> 1. Open Chrome and go to `chrome://flags#enable-autofill-virtual-view-structure`
+> 2. Enable the flag and restart Chrome
 
 ## Support
 If you have a feature request, or spotted a bug or a technical problem, create a GitHub issue.
@@ -26,3 +38,5 @@ We strongly encourage you to contribute to our repository. Find out more in our 
 This repository is available under the [MIT license](LICENSE).
 
 [header.image]: https://github.com/user-attachments/assets/f38dad92-4f42-4a70-9e81-3f614c78f9a1
+[mystore.android]: https://github.com/user-attachments/assets/e32af5eb-6920-48d2-a045-e478bd679a56
+[mystore.web]: https://github.com/user-attachments/assets/4d223691-7e10-4ffb-a2c9-22268a5c99f5
