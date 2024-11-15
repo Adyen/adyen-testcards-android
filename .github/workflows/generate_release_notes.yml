@@ -79,7 +79,6 @@ jobs:
 
               for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
                 HEADER="### $LABEL"
-                echo "Label: $LABEL"
 
                 # Capture content under "### LABEL" until a blank line or another "###" header
                 LABEL_CONTENT=$(echo "$PR_BODY" | awk -v header="$HEADER" '
@@ -90,7 +89,7 @@ jobs:
                     capture { content = content $0 "\n"; }
                     END { print content; }
                 ')
-                echo "Label content: $LABEL_CONTENT"
+                echo "Label content for $LABEL: $LABEL_CONTENT"
 
                 # If content is found, append it to the relevant label content
                 if [ ! -z "$LABEL_CONTENT" ]; then
