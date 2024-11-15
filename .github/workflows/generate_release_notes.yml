@@ -58,6 +58,7 @@ jobs:
           # Fetch recent commits since the last release tag
           LATEST_TAG=$(git describe --tags --abbrev=0)
           COMMITS=$(git log --oneline "$LATEST_TAG"..HEAD)
+          echo "COMMITS: $COMMITS"
           
           # Iterate over each commit to find PR numbers
           while IFS= read -r COMMIT; do
@@ -75,7 +76,7 @@ jobs:
               # Extract the PR body
               PR_BODY=$(echo "$PR_RESPONSE" | jq -r '.body')
           
-              echo "PR body: $PR_BODY"
+              echo "Raw PR body (with markers): >>$PR_BODY<<"
 
               for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
                 HEADER="### $LABEL"
