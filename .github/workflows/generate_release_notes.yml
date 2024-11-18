@@ -3,13 +3,17 @@ name: Generate release notes
 # TODO: Start this workflow when a release branch is created
 on:
   workflow_call:
+    outputs:
+      release-notes:
+        description: "Generated release notes"
+        value: ${{ jobs.generate_release_notes.outputs.release-notes }}
 
 jobs:
   get_allowed_labels:
     runs-on: ubuntu-latest
 
     outputs:
-      allowed_labels: ${{ steps.get_allowed_labels.outputs.ALLOWED_LABELS }}
+      allowed-labels: ${{ steps.get_allowed_labels.outputs.allowed_labels }}
 
     steps:
       - uses: actions/checkout@v4
@@ -35,12 +39,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: get_allowed_labels
 
+    outputs:
+      release-notes: ${{ steps.generate_release_notes.outputs.release_notes }}
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Generate release notes
+        id: generate_release_notes
         env:
           ALLOWED_LABELS: ${{ needs.get_allowed_labels.outputs.allowed_labels }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -105,5 +113,6 @@ jobs:
           # Print and save the output if it's not empty
           if [ ! -z "$OUTPUT" ]; then
              echo -e "Generated release notes:\n$OUTPUT" 
+             echo -e "release_notes=$RELEASE_NOTES" >> $GITHUB_OUTPUT
              echo -e "$OUTPUT" >> $GITHUB_STEP_SUMMARY
           fi
