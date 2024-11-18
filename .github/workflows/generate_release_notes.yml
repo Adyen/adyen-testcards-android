@@ -20,6 +20,8 @@ jobs:
 
       - name: Get the list of allowed pull request labels
         id: get_allowed_labels
+        env:
+          PROJECT_ROOT: ${{ github.workspace }}
         run: |
           RED='\033[0;31m'
           FILE_NAME=.release_notes_allowed_labels_list
@@ -32,8 +34,6 @@ jobs:
           ALLOWED_LABELS=$(cat $FILE_PATH)
           echo -e "allowed_labels=$ALLOWED_LABELS" >> $GITHUB_OUTPUT
           echo -e "Allowed labels are: $ALLOWED_LABELS"
-        env:
-          PROJECT_ROOT: ${{ github.workspace }}
 
   generate_release_notes:
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
       - name: Generate release notes
         id: generate_release_notes
         env:
-          ALLOWED_LABELS: ${{ needs.get_allowed_labels.outputs.allowed_labels }}
+          ALLOWED_LABELS: ${{ needs.get_allowed_labels.outputs.allowed-labels }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
         run: |
@@ -82,7 +82,7 @@ jobs:
 
               # Extract the PR body
               PR_BODY=$(echo "$PR_RESPONSE" | jq -r '.body')
-
+          
               for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
                 HEADER="### $LABEL"
 
@@ -113,6 +113,9 @@ jobs:
           # Print and save the output if it's not empty
           if [ ! -z "$OUTPUT" ]; then
              echo -e "Generated release notes:\n$OUTPUT" 
-             echo -e "release_notes=$RELEASE_NOTES" >> $GITHUB_OUTPUT
              echo -e "$OUTPUT" >> $GITHUB_STEP_SUMMARY
+  
+  
+            ENCODED_OUTPUT=$(echo "$OUTPUT" | base64)
+             echo -e "release_notes=$ENCODED_OUTPUT" >> $GITHUB_OUTPUT
           fi
