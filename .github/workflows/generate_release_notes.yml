@@ -4,9 +4,9 @@ name: Generate release notes
 on:
   workflow_call:
     outputs:
-      release-notes:
+      encoded-release-notes:
         description: "Generated release notes"
-        value: ${{ jobs.generate_release_notes.outputs.release-notes }}
+        value: ${{ jobs.generate_release_notes.outputs.encoded-release-notes }}
 
 jobs:
   get_allowed_labels:
@@ -40,7 +40,7 @@ jobs:
     needs: get_allowed_labels
 
     outputs:
-      release-notes: ${{ steps.generate_release_notes.outputs.release_notes }}
+      encoded-release-notes: ${{ steps.generate_release_notes.outputs.encoded_release_notes }}
 
     steps:
       - uses: actions/checkout@v4
@@ -116,6 +116,7 @@ jobs:
              echo -e "$OUTPUT" >> $GITHUB_STEP_SUMMARY
   
   
-            ENCODED_OUTPUT=$(echo "$OUTPUT" | base64)
-             echo -e "release_notes=$ENCODED_OUTPUT" >> $GITHUB_OUTPUT
+             ENCODED_OUTPUT=$(echo "$OUTPUT" | base64 -w 0)
+             echo -e "Encoded notes $ENCODED_OUTPUT"
+             echo -e "encoded_release_notes=$ENCODED_OUTPUT" >> $GITHUB_OUTPUT
           fi
