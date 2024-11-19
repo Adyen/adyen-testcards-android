@@ -3,10 +3,10 @@ name: Generate release notes
 # TODO: Start this workflow when a release branch is created
 on:
   workflow_call:
-    outputs:
-      encoded-release-notes:
-        description: "Generated release notes"
-        value: ${{ jobs.generate_release_notes.outputs.encoded-release-notes }}
+#    outputs:
+#      release-notes:
+#        description: "Generated release notes"
+#        value: ${{ jobs.generate_release_notes.outputs.release-notes }}
 
 jobs:
   get_allowed_labels:
@@ -40,7 +40,7 @@ jobs:
     needs: get_allowed_labels
 
     outputs:
-      encoded-release-notes: ${{ steps.generate_release_notes.outputs.encoded_release_notes }}
+      release-notes: ${{ steps.generate_release_notes.outputs.release_notes }}
 
     steps:
       - uses: actions/checkout@v4
@@ -113,10 +113,19 @@ jobs:
           # Print and save the output if it's not empty
           if [ ! -z "$OUTPUT" ]; then
              echo -e "Generated release notes:\n$OUTPUT" 
+             echo -e "release-notes=$OUTPUT" >> $GITHUB_OUTPUT
              echo -e "$OUTPUT" >> $GITHUB_STEP_SUMMARY
-  
-  
-             ENCODED_OUTPUT=$(echo "$OUTPUT" | base64 -w 0)
-             echo -e "Encoded notes $ENCODED_OUTPUT"
-             echo -e "encoded_release_notes=$ENCODED_OUTPUT" >> $GITHUB_OUTPUT
           fi
+
+  get_release_notes:
+    runs-on: ubuntu-latest
+    needs: generate_release_notes
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print release notes
+        env:
+          RELEASE_NOTES: ${{ needs.generate_release_notes.outputs.release-notes }}
+        run: |
+          echo -e "Release notes are:\n$RELEASE_NOTES"

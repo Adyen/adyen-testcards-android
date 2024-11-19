@@ -6,7 +6,7 @@ on:
       version-name:
         required: true
         type: string
-      encoded-release-notes:
+      release-notes:
         required: true
         type: string
 
@@ -20,13 +20,13 @@ jobs:
       - name: Create release notes PR
         env:
           VERSION_NAME: ${{ inputs.version-name }}
-          ENCODED_RELEASE_NOTES: ${{ inputs.encoded-release-notes }}
+          RELEASE_NOTES: ${{ inputs.release-notes }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
         run: |
           BASE_BRANCH="release-notes"
           RELEASE_NOTES_FILE="$VERSION_NAME.md"
-          RELEASE_NOTES=$(echo -e "$ENCODED_RELEASE_NOTES" | base64 --decode)
+          RELEASE_NOTES=$(echo -e "$RELEASE_NOTES" | base64 --decode)
           echo -e "Release notes: $RELEASE_NOTES"
 
           # Ensure git is set up properly

@@ -8,10 +8,10 @@ jobs:
   generate_release_notes:
     name: Generate release notes
     uses: ./.github/workflows/generate_release_notes.yml
-  create_release_notes_pr:
-    name: Create release notes pr
-    needs: generate_release_notes
-    uses: ./.github/workflows/create_release_notes_pr.yml
-    with:
-      version-name: "9.9.9"
-      encoded-release-notes: ${{ needs.generate_release_notes.outputs.encoded-release-notes }}
+#  create_release_notes_pr:
+#    name: Create release notes pr
+#    needs: generate_release_notes
+#    uses: ./.github/workflows/create_release_notes_pr.yml
+#    with:
+#      version-name: "9.9.9"
+#      encoded-release-notes: ${{ needs.generate_release_notes.outputs.encoded-release-notes }}
