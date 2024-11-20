@@ -52,71 +52,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
         run: |
-          # Define allowed labels
-          IFS=',' read -r -a ALLOWED_LABELS_ARRAY <<< "$ALLOWED_LABELS"
-          
-          # Initialize variables to hold content for each label
-          declare -A LABEL_CONTENTS
-          for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
-            LABEL_CONTENTS["$LABEL"]=""
-          done
-          
-          # Fetch recent commits since the last release tag
-          LATEST_TAG=$(git describe --tags --abbrev=0)
-          COMMITS=$(git log --oneline "$LATEST_TAG"..HEAD)
-          echo -e "Commits from latest tag($LATEST_TAG):\n$COMMITS"
-          
-          # Iterate over each commit to find PR numbers
-          while IFS= read -r COMMIT; do
-            # Check for "Merge pull request #xxxx" format in commit messages
-            if [[ $COMMIT =~ Merge\ pull\ request\ \#([0-9]+) ]]; then
-              PR_NUMBER="${BASH_REMATCH[1]}"
-              echo -e "Processing PR #$PR_NUMBER"
-
-              # Fetch PR details using the GitHub API
-              API_URL="https://api.github.com/repos/$GITHUB_REPO/pulls/$PR_NUMBER"
-              PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
-              echo -e "Fetching PR details from: $API_URL"
-
-              # Extract the PR body
-              PR_BODY=$(echo "$PR_RESPONSE" | jq -r '.body')
-          
-              for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
-                HEADER="### $LABEL"
-
-                # Capture content under "### LABEL" until a blank line or another "###" header
-                LABEL_CONTENT=$(echo "$PR_BODY" | awk -v header="$HEADER" '
-                    $0 ~ header { capture = 1; next } # Start capturing after the specified header
-                    capture && /^[#]+[ ]/ { exit } # Stop at lines starting with one or more # followed by a space
-                    capture { print $0 } # Continue capturing until a stopping condition
-                ')
-
-                # If content is found, append it to the relevant label content
-                if [ ! -z "$LABEL_CONTENT" ]; then
-                    LABEL_CONTENTS["$LABEL"]="${LABEL_CONTENTS[$LABEL]}$LABEL_CONTENT"
-                    echo -e "Generated notes for $LABEL:\n$LABEL_CONTENT"
-                fi
-              done
-            fi
-          done <<< "$COMMITS"
-
-          # Print and save the output grouped by label
-          OUTPUT=""
-          for LABEL in "${ALLOWED_LABELS_ARRAY[@]}"; do
-              if [ ! -z "${LABEL_CONTENTS[$LABEL]}" ]; then
-                  OUTPUT="${OUTPUT}### $LABEL\n${LABEL_CONTENTS[$LABEL]}\n\n"
-              fi
-          done
-          
-          # Print and save the output if it's not empty
-          if [ ! -z "$OUTPUT" ]; then
-             echo -e "Generated release notes:\n$OUTPUT" 
-             echo -e "$OUTPUT" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Save release notes in the release notes file
+          chmod +x scripts/generate_release_notes.sh
           RELEASE_NOTES_FILE_NAME="release-notes-${VERSION_NAME}.md"
-          echo "$OUTPUT" >> "$RELEASE_NOTES_FILE_NAME"
+          
+          scripts/generate_release_notes.sh $ALLOWED_LABELS $RELEASE_NOTES_FILE_NAME
 
       - name: Upload release notes artifact
         uses: actions/upload-artifact@v3
