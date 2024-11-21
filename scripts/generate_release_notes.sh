@@ -62,6 +62,7 @@ generate_release_notes_from_commits() {
 
     # Save release notes in a file
     if [ -n "$OUTPUT" ]; then
+        printf "Generated release notes:\n$OUTPUT"
         printf "$OUTPUT" >> "$RELEASE_NOTES_FILE_NAME"
         printf "$OUTPUT" >> "$GITHUB_STEP_SUMMARY"
     fi
