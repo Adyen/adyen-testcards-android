@@ -23,53 +23,11 @@ jobs:
 
       - name: Create release notes PR
         env:
+          BASE_BRANCH: "release-notes"
           VERSION_NAME: ${{ inputs.version-name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
         run: |
-          # Read release notes from the release notes artifact
-          # TODO: Maybe use the artifact file to set the release notes file directly
-          RELEASE_NOTES_ARTIFACT="release-notes-${VERSION_NAME}.md"
-          RELEASE_NOTES=$(cat $RELEASE_NOTES_ARTIFACT)
-          echo -e "Release notes: $RELEASE_NOTES"
-          
-          # Define base branch and the file name which should be commited
-          BASE_BRANCH="release-notes"
-          RELEASE_NOTES_FILE="$VERSION_NAME.md"
-
-          # Ensure git is set up properly
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-
-          # Check out the base branch
-          git fetch origin "$BASE_BRANCH"
-          git checkout "$BASE_BRANCH"
-
-          # Create and switch to the new branch
-          git checkout -b "$VERSION_NAME"
-
-          # Write the release notes to the file
-          echo -e "$RELEASE_NOTES" > "$RELEASE_NOTES_FILE"
-
-          # Add, commit, and push the changes
-          git add "$RELEASE_NOTES_FILE"
-          git commit -m "Add release notes for $VERSION_NAME release"
-          git push origin "$VERSION_NAME"
-
-          # Create a pull request using the GitHub API
-          # API_URL="https://api.github.com/repos/$GITHUB_REPO/pulls"
-          # PR_TITLE="Create release notes for $VERSION_NAME release"
-          # PR_BODY="This PR adds release notes for the $VERSION_NAME release."
-          # JSON_PAYLOAD=$(cat <<EOF
-          # {
-          #   "title": "$PR_TITLE",
-          #   "head": "$VERSION_NAME",
-          #   "base": "$BASE_BRANCH",
-          #   "body": "$PR_BODY"
-          # }
-          # EOF
-          # )
- 
-          # curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
-          # -H "Content-Type: application/json" \
-          # -d "$JSON_PAYLOAD" "$API_URL"
+          chmod +x scripts/create_release_notes_pr.sh
+          RELEASE_NOTES_FILE_NAME="release-notes-${VERSION_NAME}.md"
+          scripts/create_release_notes_pr.sh $RELEASE_NOTES_FILE_NAME
