@@ -19,7 +19,7 @@ jobs:
         env:
           VERSION_NAME: ${{ inputs.version-name }}
         with:
-          name: "release-notes-${{ env.VERSION_NAME }}"
+          name: "${{ env.VERSION_NAME }}"
 
       - name: Create release notes PR
         env:
@@ -29,5 +29,5 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
         run: |
           chmod +x scripts/create_release_notes_pr.sh
-          RELEASE_NOTES_FILE_NAME="release-notes-${VERSION_NAME}.md"
+          RELEASE_NOTES_FILE_NAME="${VERSION_NAME}.md"
           scripts/create_release_notes_pr.sh $RELEASE_NOTES_FILE_NAME

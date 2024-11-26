@@ -19,11 +19,6 @@ prepare_branches() {
 
 # Commit the release notes file
 commit_release_notes() {
-    if [[ ! -f $RELEASE_NOTES_FILE_NAME ]]; then
-      echo "Error: Release notes file '$RELEASE_NOTES_FILE_NAME' not found."
-      exit 1
-    fi
-
     echo "Adding release notes file '$RELEASE_NOTES_FILE_NAME' to the commit..."
     git add "$RELEASE_NOTES_FILE_NAME"
 
