@@ -45,13 +45,48 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Validate release notes
         env:
-          ALLOWED_LABELS: ${{ needs.get_allowed_labels.outputs.allowed-labels }}
+          REQUIRED_PR_LABELS: "Breaking change,Feature,Fix"
+          OPTIONAL_PR_LABELS: "Dependencies,Chore"
+          ALLOWED_RELEASE_NOTES_LABELS: ${{ needs.get_allowed_labels.outputs.allowed-labels }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          chmod +x scripts/check_release_notes_labels.sh
-          scripts/check_release_notes_labels.sh
+          # Fetch PR labels
+          ALL_PR_LABELS_JSON=$(cat <<EOF
+          ${{ toJson(github.event.pull_request.labels.*.name) }}
+          EOF
+          )
+          ALL_PR_LABELS=$(jq -r '.[]' <<< "$ALL_PR_LABELS_JSON")
+          
+          # Read PR labels into an array
+          IFS=',' read -r -a PR_LABELS <<< "$ALL_PR_LABELS"
+          echo "PR labels: $PR_LABELS"
+
+          # Initialize flags
+          REQUIRED_LABEL_MATCH=false
+          OPTIONAL_LABEL_MATCH=false
+
+          # Check labels against categories
+          for label in "${PR_LABELS[@]}"; do
+            if [[ ",$REQUIRED_PR_LABELS," == *",$label,"* ]]; then
+              REQUIRED_LABEL_MATCH=true
+            fi
+            if [[ ",$OPTIONAL_PR_LABELS," == *",$label,"* ]]; then
+              OPTIONAL_LABEL_MATCH=true
+            fi
+          done
+          
+          # Handle matches
+          if [[ "$OPTIONAL_LABEL_MATCH" == "true" ]]; then
+            echo "This PR has an optional label. No release notes are required."
+            exit 0
+          elif [[ "$REQUIRED_LABEL_MATCH" == "true" ]]; then
+            echo "This PR has a required label. Checking release notes..."
+            chmod +x scripts/check_release_notes_labels.sh
+            scripts/check_release_notes_labels.sh
+          else
+            echo "Error: You must add a valid label to this PR."
+            exit 1
+          fi

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Exit on any failure
-set -e
-
 #PR_BODY="## Release notes
 #         ### New
 #         - Added the ability to copy payment method data to the clipboard
@@ -12,25 +9,22 @@ set -e
 #         ## Here is another header
 #         Some content"
 #echo -e $PR_BODY
-#ALLOWED_LABELS="Breaking changes,New,Fixed,Improved,Changed,Removed,Deprecated"
+#ALLOWED_RELEASE_NOTES_LABELS="Breaking changes,New,Fixed,Improved,Changed,Removed,Deprecated"
 
 if [[ -z "$PR_BODY" ]]; then
   echo "PR_BODY is not provided. Please provide it in env list. Exiting..."
   exit 1
 fi
 
-if [[ -z "$ALLOWED_LABELS" ]]; then
-  echo "ALLOWED_LABELS is not provided. Please provide it in env list. Exiting..."
+if [[ -z "$ALLOWED_RELEASE_NOTES_LABELS" ]]; then
+  echo "ALLOWED_RELEASE_NOTES_LABELS is not provided. Please provide it in env list. Exiting..."
   exit 1
 fi
 
 # Read allowed labels into an array
-#mapfile -t ALLOWED_LABELS < "$ALLOWED_LABELS_FILE"
-#ALLOWED_LABELS=$(cat $ALLOWED_LABELS_FILE)
-#IFS=',' read -r -a ALLOWED_LABELS <<< "$ALLOWED_LABELS_LIST"
-IFS=',' read -r -a LABELS <<< "$ALLOWED_LABELS"
+IFS=',' read -r -a LABELS <<< "$ALLOWED_RELEASE_NOTES_LABELS"
 
-# Function to check for valid release notes under a label
+# Check for valid release notes under a label
 check_release_notes() {
   local label=$1
   local header="### $label"
