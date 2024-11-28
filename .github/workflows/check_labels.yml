@@ -1,0 +1,57 @@
+name: Check Labels
+
+# Every PR should have a label and some labels should include an update to the release notes
+on:
+  pull_request:
+    branches-ignore:
+      - 'main'
+      - 'release/**'
+    types: [ synchronize, labeled, unlabeled ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  get_allowed_labels:
+    runs-on: ubuntu-latest
+
+    outputs:
+      allowed-labels: ${{ steps.get_allowed_labels.outputs.allowed_labels }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get the list of allowed pull request labels
+        id: get_allowed_labels
+        env:
+          PROJECT_ROOT: ${{ github.workspace }}
+        run: |
+          RED='\033[0;31m'
+          FILE_NAME=.release_notes_allowed_labels_list
+          GITHUB_DIR=.github
+          FILE_PATH=$PROJECT_ROOT/$GITHUB_DIR/$FILE_NAME
+          if [[ ! -f "$FILE_PATH" ]]; then
+             echo -e "${RED}$FILE_NAME file doesn't exits in $GITHUB_DIR/"
+             exit 1
+          fi 
+          ALLOWED_LABELS=$(cat $FILE_PATH)
+          echo -e "allowed_labels=$ALLOWED_LABELS" >> $GITHUB_OUTPUT
+          echo -e "Allowed labels are: $ALLOWED_LABELS"
+
+  labels-check:
+    runs-on: ubuntu-latest
+    needs: get_allowed_labels
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release notes
+        env:
+          ALLOWED_LABELS: ${{ needs.get_allowed_labels.outputs.allowed-labels }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          chmod +x scripts/check_release_notes_labels.sh
+          scripts/check_release_notes_labels.sh
