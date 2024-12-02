@@ -7,6 +7,10 @@ on:
       - 'releases/**'
 
 jobs:
+  debug_info:
+    name: Debug Event Info
+    run: |
+      echo "Triggered by ${{ github.event_name }} on ref ${{ github.ref }}"
   create_github_release:
     name: Create GitHub release
     uses: ./.github/workflows/create_github_release.yml
