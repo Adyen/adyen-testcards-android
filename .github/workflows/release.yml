@@ -1,33 +1,28 @@
 name: Release
 
-# Every time we trigger the workflow on a branch.
+# Every time a push happens to the release/** branch. We use this trigger since create event does not support filtering
 on:
-  create:
+  push:
     branches:
-      - 'releases/**'
+      - 'release/**'
 
 jobs:
-  debug_info:
-    name: Debug Event Info
-    run: |
-      echo "Triggered by ${{ github.event_name }} on ref ${{ github.ref }}"
   create_github_release:
     name: Create GitHub release
     uses: ./.github/workflows/create_github_release.yml
     secrets: inherit
-    needs: [ generate_version_name, publish_to_maven_central ]
     with:
       version-name: "9.9.9"
   generate_release_notes:
     name: Generate release notes
     uses: ./.github/workflows/generate_release_notes.yml
     secrets: inherit
-    needs: [ generate_version_name, create_github_release ]
+    needs: [ create_github_release ]
     with:
       version-name: "9.9.9"
   create_release_notes_pr:
     name: Create release notes pr
     uses: ./.github/workflows/create_release_notes_pr.yml
-    needs: [ generate_version_name, generate_release_notes ]
+    needs: [ generate_release_notes ]
     with:
       version-name: "9.9.9"
