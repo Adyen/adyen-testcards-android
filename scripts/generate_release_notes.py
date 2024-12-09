@@ -65,7 +65,7 @@ def get_label_content(label: str, pr_body: str) -> str:
     return content
 
 def format_dependency_table(dependency_updates: [DependencyUpdate]) -> str:
-    table = '| Name | Version |\n|------|---------|'
+    table = '  | Name | Version |\n  |------|---------|'
 
     for dependency in dependency_updates:
         table = table + '\n  | {} | `{}` -> `{}` |'.format(dependency.link, dependency.old_version, dependency.new_version)
