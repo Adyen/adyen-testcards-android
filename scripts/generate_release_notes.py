@@ -68,7 +68,7 @@ def format_dependency_table(dependency_updates: [DependencyUpdate]) -> str:
     table = '| Name | Version |\n|------|---------|'
 
     for dependency in dependency_updates:
-        table = table + '\n| {} | `{}` -> `{}` |'.format(dependency.link, dependency.old_version, dependency.new_version)
+        table = table + '\n  | {} | `{}` -> `{}` |'.format(dependency.link, dependency.old_version, dependency.new_version)
 
     return table
 
@@ -89,7 +89,7 @@ def combine_contents(label_contents, dependency_updates) -> str:
         # Add new line to separate sections
         output = output + '\n'
 
-    return output
+    return output.strip() + '\n'
 
 def generate_dependency_updates(latest_tag: str) -> [DependencyUpdate]:
     updates = []
