@@ -1,16 +1,22 @@
 #!/bin/bash
 
-libs_file="${GITHUB_WORKSPACE}/gradle/libs.versions.toml"
-version_name_key="versionName"
-version_name_regex="^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}(-(alpha|beta|rc)[0-9]{2}){0,1}$"
+function release_version() {
+    local branch_name=$(git branch --show-current)
 
-version=$(sed -n "s/.*${version_name_key}[[:space:]]*=[[:space:]]*[\"\']\(.*\)[\"\'].*/\1/p" ${libs_file})
+    if [[ $branch_name != release/* ]]; then
+      echo "Error: invalid branch name. Branch name should start with \"release/\"."
+      exit 1
+    fi
 
-if [[ ! ${version} =~ ${version_name_regex} ]]; then
-    echo "Error: invalid version name [$version], please validate that [$version_name_key] at [$libs_file] follows regex $version_name_regex ."
-    exit 1
-fi
+    local version_name="${branch_name#*release/}"
+    local version_name_regex="^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}(-(alpha|beta|rc)[0-9]{2}){0,1}$"
 
-echo "$version"
+    if [[ ! ${version_name} =~ ${version_name_regex} ]]; then
+        echo "Error: invalid version name: $version_name. Please make sure that the name follows this pattern: $version_name_regex ."
+        exit 1
+    fi
 
-exit 0
+    echo "$version_name"
+}
+
+release_version

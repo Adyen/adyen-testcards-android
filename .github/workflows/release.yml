@@ -1,42 +1,32 @@
-name: Release
+name: Publish Release
 
+# Every time a push happens to the release/** branch. We use this trigger since create event does not support filtering
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - 'release/**'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: Gradle cache
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          cache-read-only: true
-
-      - name: Gradle build
-        run: ./gradlew build
-
-      - name: Set PROJECT_VERSION
-        run: |
-          chmod +x scripts/version_name.sh
-          PROJECT_VERSION=$(./scripts/version_name.sh)
-          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
-          echo "Variable PROJECT_VERSION set to: ${PROJECT_VERSION}"
-
-      - name: Create Github release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ env.PROJECT_VERSION }}
-          bodyFile: RELEASE_NOTES.md
-          draft: true
-          artifacts: "app/build/outputs/apk/release/app-release.apk"
+  generate_version_name:
+    name: Generate version name
+    uses: ./.github/workflows/generate_version_name.yml
+  create_github_release:
+    name: Create GitHub release
+    uses: ./.github/workflows/create_github_release.yml
+    secrets: inherit
+    needs: generate_version_name
+    with:
+      version-name: ${{ needs.generate_version_name.outputs.version-name }}
+  generate_release_notes:
+    name: Generate release notes
+    uses: ./.github/workflows/generate_release_notes.yml
+    secrets: inherit
+    needs: [ generate_version_name, create_github_release ]
+    with:
+      version-name: ${{ needs.generate_version_name.outputs.version-name }}
+  create_release_notes_pr:
+    name: Create release notes pr
+    uses: ./.github/workflows/create_release_notes_pr.yml
+    needs: [ generate_version_name, generate_release_notes ]
+    with:
+      version-name: ${{ needs.generate_version_name.outputs.version-name }}
