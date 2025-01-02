@@ -5,15 +5,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate_release_notes:
-    name: Generate release notes
-    uses: ./.github/workflows/generate_release_notes.yml
+  update_release_notes:
+    name: Update release notes
+    uses: ./.github/workflows/update_release_notes.yml
     secrets: inherit
     with:
       version-name: "9.9.9"
-  create_release_notes_pr:
-    name: Create release notes pr
-    uses: ./.github/workflows/create_release_notes_pr.yml
-    needs: generate_release_notes
+  publish_github_release:
+    name: Update release notes
+    uses: ./.github/workflows/publish_github_release.yml
+    secrets: inherit
+    needs: update_release_notes
     with:
       version-name: "9.9.9"
