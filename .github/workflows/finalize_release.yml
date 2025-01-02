@@ -3,7 +3,7 @@ name: Finalize release
 on:
   push:
     branches:
-      - 'release-notes'
+      - 'release-notes-test'
 
 jobs:
   fetch_version_name:
@@ -21,12 +21,5 @@ jobs:
     uses: ./.github/workflows/publish_github_release.yml
     secrets: inherit
     needs: [fetch_version_name, update_release_notes]
-    with:
-      version-name: ${{ needs.fetch_version_name.outputs.version-name }}
-  cleanup_release:
-    name: Update release notes
-    uses: ./.github/workflows/cleanup_release.yml
-    secrets: inherit
-    needs: [fetch_version_name, publish_github_release]
     with:
       version-name: ${{ needs.fetch_version_name.outputs.version-name }}

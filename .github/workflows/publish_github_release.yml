@@ -28,4 +28,4 @@ jobs:
           updateOnlyUnreleased: true
           omitNameDuringUpdate: true
           omitBodyDuringUpdate: true
-          draft: false
+          draft: true
