@@ -12,7 +12,7 @@ jobs:
     name: Fetch Version Name
     runs-on: ubuntu-latest
     outputs:
-      version-name: ${{ steps.fetch_version_name.outputs.version_name }}
+      version-name: ${{ steps.fetch_version_name.outputs.version-name }}
 
     steps:
       - uses: actions/checkout@v4
