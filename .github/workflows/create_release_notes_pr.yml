@@ -23,7 +23,7 @@ jobs:
 
       - name: Create release notes PR
         env:
-          BASE_BRANCH: "release-notes"
+          BASE_BRANCH: "release-notes-test"
           VERSION_NAME: ${{ inputs.version-name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
