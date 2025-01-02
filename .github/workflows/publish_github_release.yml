@@ -24,6 +24,4 @@ jobs:
         with:
           token: ${{ env.GITHUB_TOKEN }}
           tag: ${{ env.VERSION_NAME }}
-          omitNameDuringUpdate: true
-          omitBodyDuringUpdate: true
           draft: false
