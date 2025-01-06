@@ -19,6 +19,7 @@ protobufPlugin = "0.9.4"
 retrofit = "2.11.0"
 spotless = "7.0.0.BETA2"
 versionName = "1.0.0"
+detekt = "1.23.7"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -47,6 +48,7 @@ moshi-code-gen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", 
 protobuf-lite = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobuf" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
