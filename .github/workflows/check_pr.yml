@@ -9,23 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
-    name: Run Gradle check
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: Gradle cache
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-read-only: true
-
-      - name: Run detekt
-        run: ./gradlew check
+  verify_dependencies:
+    name: Validate dependencies
+    uses: ./.github/workflows/validate_dependencies.yml
+    secrets: inherit
