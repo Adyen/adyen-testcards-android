@@ -49,6 +49,7 @@ protobuf-lite = { group = "com.google.protobuf", name = "protobuf-javalite", ver
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+detekt2 = { group = "io.gitlab.arturbosch.detekt2", name = "detekt-formatting2", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
