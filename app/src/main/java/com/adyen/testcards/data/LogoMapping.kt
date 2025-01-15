@@ -4,7 +4,7 @@ import com.adyen.testcards.R
 
 internal object LogoMapping {
 
-    fun getResourceId(type: String): Int = when (type) {
+    fun getResourceId(type: String): Int? = when (type) {
         "amex" -> R.drawable.ic_pm_amex
         "bank" -> R.drawable.ic_pm_bank
         "cartebancaire" -> R.drawable.ic_pm_carte_bancaire
@@ -15,6 +15,6 @@ internal object LogoMapping {
         "mc" -> R.drawable.ic_pm_mastercard
         "visa" -> R.drawable.ic_pm_visa
         "vpay" -> R.drawable.ic_pm_vpay
-        else -> 0
+        else -> null
     }
 }
