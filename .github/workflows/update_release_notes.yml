@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: "release-notes"
+          ref: "release-notes-test"
 
       - name: Fetch filepath for updated release notes file
         id: fetch_updated_release_notes_file
@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: "release-notes"
+          ref: "release-notes-test"
 
       - name: Print updated release notes
         run: |
