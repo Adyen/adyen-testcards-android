@@ -1,5 +1,6 @@
 package com.adyen.testcards.data
 
+import com.adyen.testcards.R
 import com.adyen.testcards.domain.CreditCard
 import com.adyen.testcards.domain.CreditCardGroup
 import com.squareup.moshi.Json
@@ -14,7 +15,7 @@ data class CreditCardGroupData(
 
     fun toDomain() = CreditCardGroup(
         group = group,
-        icon = LogoMapping.getResourceId(logo),
+        icon = LogoMapping.getResourceId(logo) ?: R.drawable.ic_pm_card,
         items = items.map { it.toDomain() },
     )
 }
