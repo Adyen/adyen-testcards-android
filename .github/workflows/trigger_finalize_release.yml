@@ -3,7 +3,7 @@ name: Trigger Finalize Release
 on:
   push:
     branches:
-      - 'release-notes'
+      - 'release-notes-test'
 
 jobs:
   fetch_version_name:
