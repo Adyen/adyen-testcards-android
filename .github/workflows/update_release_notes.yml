@@ -44,7 +44,7 @@ jobs:
 
       - name: Print updated release notes
         run: |
-          cat ${{ steps.fetch_updated_release_notes_file.outputs.updated-release-notes-filepath }}
+          cat ${{ needs.fetch_updated_release_notes_file.outputs.updated-release-notes-filepath }}
 
       # Update Github release with the updated release notes
       - name: Update Github release notes
@@ -53,7 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION_NAME: ${{ inputs.version-name }}
-          BODY_FILE: ${{ steps.fetch_updated_release_notes_file.outputs.updated-release-notes-filepath }}
+          BODY_FILE: ${{ needs.fetch_updated_release_notes_file.outputs.updated-release-notes-filepath }}
         with:
           token: ${{ env.GITHUB_TOKEN }}
           tag: ${{ env.VERSION_NAME }}
