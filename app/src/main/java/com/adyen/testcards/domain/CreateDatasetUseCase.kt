@@ -16,7 +16,7 @@ internal class CreateDatasetUseCase @Inject constructor() {
         is IBAN -> createIBANDataset(input, parsedStructure)
         is UPI -> createUPIDataset(input, parsedStructure)
         is UsernamePassword -> createUsernamePasswordDataset(input, parsedStructure)
-        else -> error("Unknown input: $input")
+        else -> error("Unknown input $input")
     }
 
     private fun createCreditCardDataset(card: CreditCard, parsedStructure: ParsedStructure): Dataset {
