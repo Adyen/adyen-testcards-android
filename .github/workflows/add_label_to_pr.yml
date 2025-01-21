@@ -26,7 +26,6 @@ jobs:
           LABEL=$(./scripts/generate_label_for_pr.sh "$branch_name")
           echo -e "label=$LABEL" >> $GITHUB_OUTPUT
           echo -e $LABEL
-          
 
   add_label_to_pr:
     needs: get_label
