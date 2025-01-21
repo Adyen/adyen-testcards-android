@@ -17,7 +17,7 @@ internal class StructureParser {
             val applicationId = node.title.split("/").firstOrNull().orEmpty()
             when {
                 blockedAppIds.any { applicationId.startsWith(it) } -> {
-                    Log.d(TAG, "Application ID ignored: $applicationId")
+                    Log.d(TAG, "Application ID ignored $applicationId")
                 }
 
                 else -> {
