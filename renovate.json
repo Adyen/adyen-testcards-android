@@ -22,6 +22,7 @@
       ]
     },
     {
+      "automerge": true,
       "minimumReleaseAge": "21 days",
       "schedule": [
         "on the first day of the month"
