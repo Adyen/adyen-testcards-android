@@ -1,5 +1,6 @@
 package com.adyen.testcards.autofill
 
+import android.os.Bundle
 import android.service.autofill.Dataset
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -34,7 +35,9 @@ internal class AutofillViewModel @Inject constructor(
     private val createDatasetUseCase: CreateDatasetUseCase,
 ) : ViewModel() {
 
-    private val parsedStructure: ParsedStructure = savedStateHandle["EXTRA_PARSED_RESULT"]!!
+    private val parsedStructure: ParsedStructure = savedStateHandle
+        .get<Bundle>(AutofillActivity.EXTRA_BUNDLE)
+        ?.getParcelable(AutofillActivity.EXTRA_PARSED_RESULT)!!
     private val detectedPaymentMethod = detectPaymentMethod()
 
     private val _dataset = MutableSharedFlow<Dataset>()

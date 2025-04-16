@@ -38,7 +38,11 @@ class AdyenTestCardsAutofillService : AutofillService() {
 
         val responseBuilder = FillResponse.Builder()
 
-        pendingIntent = AutofillActivity.createPendingIntent(this, parsedStructure, requestCode.getAndIncrement())
+        pendingIntent = AutofillActivity.createPendingIntent(
+            context = applicationContext,
+            parsedStructure = parsedStructure,
+            requestCode = requestCode.getAndIncrement(),
+        )
         val remoteViews = RemoteViews(packageName, R.layout.item_autofill_entry)
 
         val datasetBuilder = Dataset.Builder()
