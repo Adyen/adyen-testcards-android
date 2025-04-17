@@ -1,14 +1,13 @@
 package com.adyen.testcards.main
 
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE
 import android.view.autofill.AutofillManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.adyen.testcards.R
@@ -84,6 +84,20 @@ private fun MainScreen(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            ) {
+                AdyenSearchBar(
+                    query = uiState.query,
+                    onQueryChange = onQueryChange,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
         snackbarHost = { SnackbarHost(snackBarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
     ) { innerPadding ->
@@ -94,11 +108,6 @@ private fun MainScreen(
             isRefreshing = remember(uiState) { uiState.isLoading },
             onRefresh = onRefresh,
         ) {
-            AdyenSearchBar(
-                query = uiState.query,
-                onQueryChange = onQueryChange,
-                modifier = Modifier.align(Alignment.TopCenter),
-            )
             when (uiState) {
                 is MainUIState.Content -> MainContent(uiState, onFavoriteClick)
                 is MainUIState.Empty -> MainEmpty()
@@ -142,7 +151,7 @@ private fun MainScreen(
                 TextButton(
                     onClick = {
                         currentContext.startActivity(
-                            Intent(ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package:com.adyen.testcards")),
+                            Intent(ACTION_REQUEST_SET_AUTOFILL_SERVICE, "package:com.adyen.testcards".toUri()),
                         )
                         shouldShowDialog = false
                     },
@@ -164,10 +173,7 @@ private fun MainContent(
     uiState: MainUIState.Content,
     onFavoriteClick: (Any, Boolean) -> Unit,
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(0.dp, 72.dp, 0.dp, 0.dp),
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
         val paymentMethods = uiState.paymentMethods
 
         if (paymentMethods.hasFavorites()) {

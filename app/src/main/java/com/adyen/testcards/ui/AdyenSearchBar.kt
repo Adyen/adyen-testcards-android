@@ -21,7 +21,8 @@ import com.adyen.testcards.R
 fun AdyenSearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
 ) {
     val focusManager = LocalFocusManager.current
     SearchBar(
@@ -46,7 +47,7 @@ fun AdyenSearchBar(
         content = {},
         expanded = false,
         onExpandedChange = {},
-        windowInsets = WindowInsets(0.dp),
+        windowInsets = windowInsets,
         modifier = modifier,
     )
 }

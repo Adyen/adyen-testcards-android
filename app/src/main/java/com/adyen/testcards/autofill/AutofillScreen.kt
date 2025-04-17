@@ -2,10 +2,9 @@ package com.adyen.testcards.autofill
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -66,11 +65,16 @@ private fun AutofillScreen(
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
     ) {
-        Box {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             AdyenSearchBar(
                 query = uiState.query,
                 onQueryChange = onQueryChange,
-                modifier = Modifier.align(Alignment.TopCenter),
+                windowInsets = WindowInsets(0.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
             )
 
             when (uiState) {
@@ -88,10 +92,7 @@ private fun AutofillContent(
     onFavoriteClick: (Any, Boolean) -> Unit,
     onPaymentMethodClick: (Any) -> Unit,
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(0.dp, 72.dp, 0.dp, 0.dp),
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
         val paymentMethods = uiState.paymentMethods
 
         if (paymentMethods.hasFavorites()) {
