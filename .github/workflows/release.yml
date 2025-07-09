@@ -7,26 +7,16 @@ on:
       - 'release/**'
 
 jobs:
-  generate_version_name:
-    name: Generate version name
-    uses: ./.github/workflows/generate_version_name.yml
   create_github_release:
     name: Create GitHub release
     uses: ./.github/workflows/create_github_release.yml
     secrets: inherit
-    needs: generate_version_name
     with:
-      version-name: ${{ needs.generate_version_name.outputs.version-name }}
-  generate_release_notes:
-    name: Generate release notes
-    uses: ./.github/workflows/generate_release_notes.yml
+      version-name: 9.9.9
+  publish_github_release:
+    name: Create GitHub release
+    uses: ./.github/workflows/finalize_release.yml
     secrets: inherit
-    needs: [ generate_version_name, create_github_release ]
+    needs: create_github_release
     with:
-      version-name: ${{ needs.generate_version_name.outputs.version-name }}
-  create_release_notes_pr:
-    name: Create release notes pr
-    uses: ./.github/workflows/create_release_notes_pr.yml
-    needs: [ generate_version_name, generate_release_notes ]
-    with:
-      version-name: ${{ needs.generate_version_name.outputs.version-name }}
+      version-name: 9.9.9
