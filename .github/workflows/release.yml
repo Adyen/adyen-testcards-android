@@ -12,11 +12,11 @@ jobs:
     uses: ./.github/workflows/create_github_release.yml
     secrets: inherit
     with:
-      version-name: 9.9.9
+      version-name: 9.9.10
   publish_github_release:
     name: Create GitHub release
     uses: ./.github/workflows/finalize_release.yml
     secrets: inherit
     needs: create_github_release
     with:
-      version-name: 9.9.9
+      version-name: 9.9.10
