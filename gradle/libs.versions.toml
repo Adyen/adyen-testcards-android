@@ -17,7 +17,7 @@ moshi = "1.15.2"
 protobuf = "4.31.1"
 protobufPlugin = "0.9.5"
 retrofit = "3.0.0"
-spotless = "7.0.0.BETA2"
+spotless = "7.2.1"
 versionName = "1.1.2"
 
 [libraries]
