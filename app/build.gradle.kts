@@ -117,18 +117,6 @@ protobuf {
     }
 }
 
-androidComponents {
-    onVariants(selector().all()) { variant ->
-        afterEvaluate {
-            val capName =
-                variant.name.replaceFirstChar { it.titlecase() }
-            tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
-                setSource(tasks.getByName("generate${capName}Proto").outputs)
-            }
-        }
-    }
-}
-
 spotless {
     kotlin {
         target("**/*.kt")
