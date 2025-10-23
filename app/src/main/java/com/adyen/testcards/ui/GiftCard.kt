@@ -1,6 +1,5 @@
 package com.adyen.testcards.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,7 +48,6 @@ internal fun LazyListScope.giftCardSection(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun GiftCard(
     giftCard: GiftCard,

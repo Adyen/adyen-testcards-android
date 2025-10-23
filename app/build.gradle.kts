@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -13,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.adyen.testcards"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.adyen.testcards"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 5
         versionName = libs.versions.versionName.get()
 
@@ -46,12 +44,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 
     buildFeatures {
@@ -76,6 +74,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -110,22 +109,10 @@ protobuf {
     // for more information.
     generateProtoTasks {
         all().forEach { task ->
-            task.plugins {
+            task.builtins {
                 create("java") {
                     option("lite")
                 }
-            }
-        }
-    }
-}
-
-androidComponents {
-    onVariants(selector().all()) { variant ->
-        afterEvaluate {
-            val capName =
-                variant.name.replaceFirstChar { it.titlecase() }
-            tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
-                setSource(tasks.getByName("generate${capName}Proto").outputs)
             }
         }
     }
