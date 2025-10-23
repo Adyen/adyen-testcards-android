@@ -1,6 +1,5 @@
 package com.adyen.testcards.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,7 +42,6 @@ internal fun LazyListScope.upiSection(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun UPI(
     upi: UPI,

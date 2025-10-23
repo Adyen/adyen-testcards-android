@@ -1,5 +1,6 @@
 package com.adyen.testcards.ui
 
+import android.content.ClipData
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -7,11 +8,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.Clipboard
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 
 @Composable
 fun CopyMenu(
@@ -32,12 +35,14 @@ fun CopyMenu(
 
         HorizontalDivider()
 
-        val clipboardManager: ClipboardManager = LocalClipboardManager.current
+        val clipboardManager: Clipboard = LocalClipboard.current
         items.forEach { (title, value) ->
+            val coroutineScope = rememberCoroutineScope()
             DropdownMenuItem(
                 text = { Text(title) },
                 onClick = {
-                    clipboardManager.setText(AnnotatedString(value))
+                    val clipData = ClipData.newPlainText(title, value)
+                    coroutineScope.launch { clipboardManager.setClipEntry(ClipEntry(clipData)) }
                     onDismissRequest()
                 },
             )
