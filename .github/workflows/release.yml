@@ -29,17 +29,17 @@ jobs:
       - name: Gradle build
         run: ./gradlew build
 
-      - name: Set PROJECT_VERSION
+      - name: Get Project Version
+        id: get_version
         run: |
-          chmod +x scripts/version_name.sh
-          PROJECT_VERSION=$(./scripts/version_name.sh)
-          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
-          echo "Variable PROJECT_VERSION set to: ${PROJECT_VERSION}"
+          VERSION=$(./gradlew -q printVersion)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Create Github release
-        uses: ncipollo/release-action@v1
+        # v1.2.0
+        uses: ncipollo/release-action@b7eabc95ff50cbeeedec83973935c8f306dfcd0b
         with:
-          tag: ${{ env.PROJECT_VERSION }}
+          tag: ${{ steps.get_version.outputs.version }}
           bodyFile: RELEASE_NOTES.md
           draft: true
           artifacts: "app/build/outputs/apk/release/app-release.apk"
