@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: '0 0 * * *'  # Run every day at midnight
 
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   manage_stale_contributions:
     runs-on: ubuntu-latest
