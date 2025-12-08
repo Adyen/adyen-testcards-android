@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [ opened, synchronize, reopened ]
   merge_group:
-    types: [checks_requested]
+    types: [ checks_requested ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
@@ -20,6 +20,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+
+      # Restore trusted gradlew scripts from the main branch
+      - name: Restore Gradle wrapper from main
+        run: |
+          git fetch origin main
+          git restore --source=origin/main -- gradlew gradlew.bat
 
       - name: Set up JDK
         uses: actions/setup-java@v5
