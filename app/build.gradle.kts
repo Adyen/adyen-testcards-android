@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -11,12 +13,12 @@ plugins {
 
 android {
     namespace = "com.adyen.testcards"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.adyen.testcards"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 5
         versionName = libs.versions.versionName.get()
 
@@ -36,6 +38,7 @@ android {
         }
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
@@ -48,10 +51,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     buildFeatures {
         compose = true
     }
@@ -60,6 +59,12 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_11
     }
 }
 

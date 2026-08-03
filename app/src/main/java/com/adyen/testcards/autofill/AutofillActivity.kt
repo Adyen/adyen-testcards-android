@@ -11,7 +11,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.core.os.bundleOf
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.adyen.testcards.ui.theme.AdyenTheme
@@ -63,7 +62,8 @@ internal class AutofillActivity : ComponentActivity() {
         ): PendingIntent {
             val intent = Intent(context, AutofillActivity::class.java).apply {
                 // Wrap parsed structure in a bundle to ensure it's available in extra's on older android versions.
-                putExtra(EXTRA_BUNDLE, bundleOf(EXTRA_PARSED_RESULT to parsedStructure))
+                val bundle = Bundle().apply { putParcelable(EXTRA_PARSED_RESULT, parsedStructure) }
+                putExtra(EXTRA_BUNDLE, bundle)
             }
 
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

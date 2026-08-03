@@ -13,7 +13,7 @@ tasks.register("printVersion") {
     group = "versioning"
     doLast {
         val versionName = libs.versions.versionName.get()
-        val versionRegex = "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,2}(-(alpha|beta|rc)[0-9]{2})?\$".toRegex()
+        val versionRegex = "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,2}(-(alpha|beta|rc)[0-9]{2})?$".toRegex()
         if (!versionName.matches(versionRegex)) {
             throw GradleException("Error: Invalid version name format: '$versionName'. Does not match regex: ${versionRegex.pattern}")
         }
