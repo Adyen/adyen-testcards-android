@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.adyen.testcards"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.adyen.testcards"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 5
         versionName = libs.versions.versionName.get()
 
